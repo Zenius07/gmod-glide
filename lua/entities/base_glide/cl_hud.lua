@@ -93,9 +93,10 @@ local RealTime = RealTime
 local LocalPlayer = LocalPlayer
 
 function ENT:OnWeaponIndexChange( _, _, index )
-    local driver = self:GetDriver()
+    //local driver = self:GetDriver()
+    local gunner = self.seats[2]:GetDriver()
 
-    if driver == LocalPlayer() then
+    if gunner == LocalPlayer() then
         -- Show the weapon switch notification
         self.weaponNotifyTimer = RealTime() + 1.5
         EmitSound( "glide/ui/hud_switch.wav", Vector(), -2, nil, 1.0, nil, nil, 100 )

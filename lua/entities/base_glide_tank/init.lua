@@ -29,12 +29,12 @@ end
 
 --- Implement this base class function.
 function ENT:OnDriverEnter()
-    self:TurnOn()
+    //self:TurnOn()   --- commented on the automatic switching on and off of the engine so that the driver can turn it on by himself
 end
 
 --- Implement this base class function.
 function ENT:OnDriverExit()
-    self:TurnOff()
+    //self:TurnOff()  --- commented on the automatic switching on and off of the engine so that the driver can turn it on by himself
 end
 
 --- Override this base class function.
@@ -292,11 +292,12 @@ function ENT:OnPostThink( dt, selfTbl )
     selfTbl.inputSteer = inputSteer
     selfTbl.steerAngle[2] = -inputSteer * maxAng
 
-    -- Update turret angles, if we have a driver
-    local driver = self:GetDriver()
+    -- Update turret angles, if we have a gunner
+    //local driver = self:GetDriver()
+    local gunner = self:GetSeatDriver(2)
 
-    if IsValid( driver ) and self:WaterLevel() < 2 then
-        local newAng, isAimingAtTarget = self:UpdateTurret( driver, dt, self:GetTurretAngle() )
+    if IsValid( gunner ) and self:WaterLevel() < 2 then
+        local newAng, isAimingAtTarget = self:UpdateTurret( gunner, dt, self:GetTurretAngle() )
 
         -- Don't let it shoot while inside walls
         local origin = self:GetTurretOrigin()
