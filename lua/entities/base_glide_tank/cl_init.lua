@@ -33,7 +33,8 @@ end
 --- Override this base class function.
 function ENT:OnLocalPlayerEnter( seatIndex )
     BaseClass.OnLocalPlayerEnter( self, seatIndex )
-    self.isPredicted = seatIndex == 1
+    //self.isPredicted = seatIndex == 1
+    self.isPredicted = seatIndex == 2
 end
 
 --- Override this base class function.
@@ -121,11 +122,12 @@ function ENT:OnUpdateMisc()
     end
 
     local dt = FrameTime()
-    local driver = self:GetDriver()
+    //local driver = self:GetDriver()
+    local gunner = self.seats[2]:GetDriver()
     local lastYaw = self.currentTurretAng[2]
 
-    if self.isPredicted and IsValid( driver ) then
-        self.currentTurretAng = self:UpdateTurret( driver, dt, self.currentTurretAng )
+    if self.isPredicted and IsValid( gunner ) then
+        self.currentTurretAng = self:UpdateTurret( gunner, dt, self.currentTurretAng )
     else
         local curAng = self.currentTurretAng
         local targetAng = self:GetTurretAngle()
@@ -242,7 +244,10 @@ do
     function ENT:DrawVehicleHUD( screenW, screenH )
         BaseClass.DrawVehicleHUD( self, screenW, screenH )
 
-        DrawWeaponCrosshair( screenW * 0.5, screenH * 0.5, "glide/aim_tank.png", 0.14, crosshairColor[self:GetIsAimingAtTarget()] )
+        //DrawWeaponCrosshair( screenW * 0.5, screenH * 0.5, "glide/aim_tank.png", 0.14, crosshairColor[self:GetIsAimingAtTarget()] )
+        if LocalPlayer() == self.seats[2]:GetDriver() then
+            DrawWeaponCrosshair( screenW * 0.5, screenH * 0.5, "glide/aim_tank.png", 0.14, crosshairColor[self:GetIsAimingAtTarget()] )
+        end
 
         if not Camera.isInFirstPerson then return end
 

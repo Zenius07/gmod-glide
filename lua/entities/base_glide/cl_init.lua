@@ -289,7 +289,8 @@ end
 function ENT:OnLocalPlayerEnter( seatIndex )
     self:DisableCrosshair()
 
-    if seatIndex > 1 then return end
+    //if seatIndex > 1 then return end
+    if seatIndex ~= 2 then return end
 
     -- Setup the default crosshair
     local info = self.CrosshairInfo[self:GetWeaponIndex()]
