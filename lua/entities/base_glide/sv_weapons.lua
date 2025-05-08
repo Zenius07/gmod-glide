@@ -26,7 +26,7 @@ function ENT:WeaponInit()
         -- timings from the previous weapon if it has the same ammo type.
         weapon.ammoType = data.ammoType
 
-        -- Set to 0 for unlimited clip ammo
+        -- Set to 0 for unlimited clip ammo -> 0 no longer makes endless clips
         weapon.maxAmmo = data.maxAmmo or 0
 
         -- How often can this weapon fire?
@@ -137,20 +137,24 @@ function ENT:WeaponThink()
     local t = CurTime()
 
     -- Reload if it is the time to do so
-    if weapon.ammo < weapon.maxAmmo and t > weapon.nextReload then
+    if (weapon.ammo == 0 and t > weapon.nextReload) and weapon.maxAmmo > 0 then
         weapon.ammo = weapon.maxAmmo
+    elseif weapon.maxAmmo < 1 then
+        weapon.ammo = 1
     end
 
     //local isFiring = self:GetInputBool( 1, "attack" )
     local isFiring = self:GetInputBool( 2, "attack" )
 
-    if isFiring and t > weapon.nextFire and ( weapon.ammo > 0 or weapon.maxAmmo == 0 ) then
-        if t > weapon.nextReload then
-            weapon.nextReload = t + weapon.replenishDelay
-        end
+    if isFiring and t > weapon.nextFire and weapon.ammo > 0 then
 
         weapon.ammo = weapon.ammo - 1
         weapon.nextFire = t + weapon.fireRate
+
+        if weapon.ammo == 0 then
+            weapon.nextReload = t + weapon.replenishDelay
+            weapon.ammo = 0
+        end
 
         self:OnWeaponFire( weapon, weaponIndex )
     end
