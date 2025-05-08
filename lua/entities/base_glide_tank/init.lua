@@ -84,10 +84,11 @@ function ENT:GetTurretAimDirection()
 
     -- Use the driver's aim position directly when
     -- the turret is aiming close enough to it.
-    local driver = self:GetDriver()
+    //local driver = self:GetDriver()
+    local gunner = self:GetSeatDriver(2)
 
-    if IsValid( driver ) and self:GetIsAimingAtTarget() then
-        local dir = driver:GlideGetAimPos() - origin
+    if IsValid( gunner ) and self:GetIsAimingAtTarget() then
+        local dir = gunner:GlideGetAimPos() - origin
         dir:Normalize()
         ang = dir:Angle()
     end
