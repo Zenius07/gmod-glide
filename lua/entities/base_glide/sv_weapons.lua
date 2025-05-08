@@ -26,7 +26,7 @@ function ENT:WeaponInit()
         -- timings from the previous weapon if it has the same ammo type.
         weapon.ammoType = data.ammoType
 
-        -- Set to 0 for unlimited clip ammo -> 0 no longer makes endless clips
+        -- Set to 0 for unlimited clip ammo
         weapon.maxAmmo = data.maxAmmo or 0
 
         -- How often can this weapon fire?
