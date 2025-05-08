@@ -94,6 +94,9 @@ local LocalPlayer = LocalPlayer
 
 function ENT:OnWeaponIndexChange( _, _, index )
     //local driver = self:GetDriver()
+    local seats = self.seats
+    if not seats then return end
+
     local gunner = self.seats[2]:GetDriver()
 
     if gunner == LocalPlayer() then
