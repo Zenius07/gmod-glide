@@ -137,27 +137,23 @@ function ENT:WeaponThink()
     local t = CurTime()
 
     -- Reload if it is the time to do so
-    if (weapon.ammo == 0 and t > weapon.nextReload) and weapon.maxAmmo > 0 then
+    if weapon.ammo < 1 and t > weapon.nextReload then
         weapon.ammo = weapon.maxAmmo
-    elseif weapon.maxAmmo < 1 then
-        weapon.ammo = 1
     end
 
-    //local isFiring = self:GetInputBool( 1, "attack" )
-    local isFiring = self:GetInputBool( 2, "attack" )
+    local isFiring = self:GetInputBool( 1, "attack" )
 
-    if isFiring and t > weapon.nextFire and weapon.ammo > 0 then
-
+    if isFiring and t > weapon.nextFire and ( weapon.ammo > 0 or weapon.maxAmmo == 0 ) then
         weapon.ammo = weapon.ammo - 1
         weapon.nextFire = t + weapon.fireRate
 
-        if weapon.ammo == 0 then
-            weapon.nextReload = t + weapon.replenishDelay
-            weapon.ammo = 0
-        end
-
         self:OnWeaponFire( weapon, weaponIndex )
+
+        if weapon.ammo < 1 and weapon.maxAmmo > 0 then
+            weapon.nextReload = t + weapon.replenishDelay
+        end
     end
+    
 
     -- Trigger `OnWeaponStop` once the weapon runs out of ammo or
     -- the driver is no longer pressing the attack button
