@@ -382,6 +382,9 @@ do
 
         local traceData = self:GetTraceData()
 
+        -- Ignore water
+        traceData.mask = MASK_NPCSOLID - MASK_WATER
+
         -- Try the original exit position first
         local blocked, pos = ValidateExitPos( seat.GlideExitPos, traceData, self )
 
@@ -403,6 +406,8 @@ do
             blocked, pos = ValidateExitPos( Vector( maxs[1] * 2, 0, 0 ), traceData, self )
         end
 
+        traceData.mask = nil
+
         if blocked then
             -- We're cooked...
             pos = seat:GetPos()
@@ -412,16 +417,31 @@ do
     end
 end
 
+--- Returns how many players are inside of this vehicle.
+function ENT:GetPlayerCount()
+    local count = 0
+
+    for _, seat in ipairs( self.seats ) do
+        if IsValid( seat ) and IsValid( seat:GetDriver() ) then
+            count = count + 1
+        end
+    end
+
+    return count
+end
+
 --- Returns all players that are inside of this vehicle.
 function ENT:GetAllPlayers()
     local players = {}
     local driver
 
     for _, seat in ipairs( self.seats ) do
-        driver = seat:GetDriver()
+        if IsValid( seat ) then
+            driver = seat:GetDriver()
 
-        if IsValid( driver ) then
-            players[#players + 1] = driver
+            if IsValid( driver ) then
+                players[#players + 1] = driver
+            end
         end
     end
 
@@ -562,7 +582,8 @@ function ENT:Think()
     -- If we have at least one seat...
     if #selfTbl.seats > 0 then
         -- Use it to check if we have a driver
-        local driver = selfTbl.seats[1]:GetDriver()
+        local driverSeat = selfTbl.seats[1]
+        local driver = IsValid( driverSeat ) and driverSeat:GetDriver() or NULL
 
         if driver ~= self:GetDriver() then
             self:SetDriver( driver )
