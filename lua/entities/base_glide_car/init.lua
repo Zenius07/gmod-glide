@@ -142,16 +142,18 @@ end
 
 --- Implement this base class function.
 function ENT:OnDriverEnter()
-    self:TurnOn()
+    //self:TurnOn()
 end
 
 --- Implement this base class function.
 function ENT:OnDriverExit()
+    /*
     local keepOn = IsValid( self.lastDriver ) and self.lastDriver:KeyDown( IN_WALK )
 
     if not self.hasRagdolledAllPlayers and not keepOn then
         self:TurnOff()
     end
+    */
 
     self:SetIsHonking( false )
 end
@@ -219,8 +221,8 @@ function ENT:OnSeatInput( seatIndex, action, pressed )
             immediate = true
         } )
 
-    elseif action == "accelerate" and self:GetEngineState() == 0 then
-        self:TurnOn()
+    //elseif action == "accelerate" and self:GetEngineState() == 0 then
+    //    self:TurnOn()
     end
 
     if not self.inputManualShift then return end
