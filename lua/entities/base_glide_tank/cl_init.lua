@@ -245,8 +245,11 @@ do
         BaseClass.DrawVehicleHUD( self, screenW, screenH )
 
         //DrawWeaponCrosshair( screenW * 0.5, screenH * 0.5, "glide/aim_tank.png", 0.14, crosshairColor[self:GetIsAimingAtTarget()] )
-        if LocalPlayer() == self.seats[2]:GetDriver() then
-            DrawWeaponCrosshair( screenW * 0.5, screenH * 0.5, "glide/aim_tank.png", 0.14, crosshairColor[self:GetIsAimingAtTarget()] )
+        local seats = self.seats
+        if seats then
+            if LocalPlayer() == self.seats[2]:GetDriver() then
+                DrawWeaponCrosshair( screenW * 0.5, screenH * 0.5, "glide/aim_tank.png", 0.14, crosshairColor[self:GetIsAimingAtTarget()] )
+            end
         end
 
         if not Camera.isInFirstPerson then return end
