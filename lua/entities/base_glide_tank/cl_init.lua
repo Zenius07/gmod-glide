@@ -239,15 +239,18 @@ do
 
     local matBody = Material( "materials/glide/tank_body.png", "smooth" )
     local matTurret = Material( "materials/glide/tank_turret.png", "smooth" )
+    local ifvTurret = Material( "zen_shared/icons/ifv_turret.png" )
 
     --- Override this base class function.
     function ENT:DrawVehicleHUD( screenW, screenH )
         BaseClass.DrawVehicleHUD( self, screenW, screenH )
 
+        local isIFV = self.trackedIFV
+
         //DrawWeaponCrosshair( screenW * 0.5, screenH * 0.5, "glide/aim_tank.png", 0.14, crosshairColor[self:GetIsAimingAtTarget()] )
         local seats = self.seats
         if seats then
-            if LocalPlayer() == self.seats[2]:GetDriver() then
+            if not isIFV and LocalPlayer() == self.seats[2]:GetDriver() then
                 DrawWeaponCrosshair( screenW * 0.5, screenH * 0.5, "glide/aim_tank.png", 0.14, crosshairColor[self:GetIsAimingAtTarget()] )
             end
         end
@@ -272,7 +275,12 @@ do
 
         ang = ang + self.currentTurretAng[2]
 
-        SetMaterial( matTurret )
+        if not isIFV then 
+            SetMaterial( matTurret )
+        else
+            SetMaterial( ifvTurret )
+        end
+        
         DrawTexturedRectRotated( x, y, size, size, ang )
     end
 end
