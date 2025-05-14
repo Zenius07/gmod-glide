@@ -513,7 +513,7 @@ function ENT:CreateSeat( offset, angle, exitPos, isHidden )
     -- Let Glide know it should handle this seat differently
     seat.GlideSeatIndex = index
     seat.GlideExitPos = exitPos
-    seat:SetNWInt( "GlideSeatIndex", index )
+    
     self:DeleteOnRemove( seat )
 
     self.seats[index] = seat
