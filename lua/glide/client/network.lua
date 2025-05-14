@@ -127,7 +127,6 @@ commands[Glide.CMD_SET_CURRENT_VEHICLE] = function()
     ply.GlideCurrentSeatIndex = net.ReadUInt( 6 )
 end
 
-
 net.Receive( "glide.command", function()
     local cmd = net.ReadUInt( Glide.CMD_SIZE )
 

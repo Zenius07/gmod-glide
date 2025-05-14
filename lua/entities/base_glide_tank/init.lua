@@ -17,7 +17,6 @@ function ENT:OnPostInitialize()
     self.isCannonInsideWall = false
 
     self:SetTrackSpeed( 0 )
-
     self:SetTurretAngle( Angle() )
     self:SetIsAimingAtTarget( false )
 
@@ -109,11 +108,10 @@ function ENT:GetTurretAimDirection()
 
     -- Use the driver's aim position directly when
     -- the turret is aiming close enough to it.
-    //local driver = self:GetDriver()
-    local gunner = self:GetSeatDriver(2)
+    local driver = self:GetDriver()
 
-    if IsValid( gunner ) and self:GetIsAimingAtTarget() then
-        local dir = gunner:GlideGetAimPos() - origin
+    if IsValid( driver ) and self:GetIsAimingAtTarget() then
+        local dir = driver:GlideGetAimPos() - origin
         dir:Normalize()
         ang = dir:Angle()
     end
@@ -211,14 +209,13 @@ local Abs = math.abs
 
 --- Override this base class function.
 function ENT:OnPostThink( dt, selfTbl )
-   BaseClass.OnPostThink( self, dt, selfTbl )
+    BaseClass.OnPostThink( self, dt, selfTbl )
 
-    -- Update turret angles, if we have a gunner
-    //local driver = self:GetDriver()
-    local gunner = self:GetSeatDriver(2)
+    -- Update turret angles, if we have a driver
+    local driver = self:GetDriver()
 
-    if IsValid( gunner ) and self:WaterLevel() < 2 then
-        local newAng, isAimingAtTarget = self:UpdateTurret( gunner, dt, self:GetTurretAngle() )
+    if IsValid( driver ) and self:WaterLevel() < 2 then
+        local newAng, isAimingAtTarget = self:UpdateTurret( driver, dt, self:GetTurretAngle() )
 
         -- Don't let it shoot while inside walls
         local origin = self:GetTurretOrigin()
@@ -313,6 +310,7 @@ function ENT:WheelThink( dt )
 
     local maxRPM = self:GetTransmissionMaxRPM( self:GetGear() )
     local inputHandbrake = self:GetInputBool( 1, "handbrake" )
+
     traction = self:GetForwardTractionBias()
     tractionFront = ( 1 + Clamp( traction, -1, 0 ) ) * selfTbl.frontTractionMult
     tractionRear = ( 1 - Clamp( traction, 0, 1 ) ) * selfTbl.rearTractionMult
@@ -358,6 +356,7 @@ function ENT:WheelThink( dt )
 
         totalAngVel = totalAngVel + Abs( state.angularVelocity )
     end
+
     selfTbl.avgPoweredRPM = avgRPM
     selfTbl.groundedCount = groundedCount
     selfTbl.avgSideSlip = totalSideSlip / selfTbl.wheelCount

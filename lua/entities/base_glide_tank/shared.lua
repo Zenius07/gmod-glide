@@ -136,7 +136,6 @@ if SERVER then
     ENT.TurretFireVolume = 0.8
     ENT.TurretRecoilForce = 50
     ENT.TurretDamage = 550
-    
     -- Override this base class function.
     function ENT:GetGears()
         return {
