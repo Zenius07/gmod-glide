@@ -141,7 +141,11 @@ function ENT:WeaponThink()
         weapon.ammo = weapon.maxAmmo
     end
 
-    local isFiring = self:GetInputBool( 2, "attack" )
+    local gunnerSeat = 2
+
+    if self.gunnerSeat then gunnerSeat = self.gunnerSeat end
+
+    local isFiring = self:GetInputBool( gunnerSeat, "attack" )
 
     if isFiring and t > weapon.nextFire and ( weapon.ammo > 0 or weapon.maxAmmo == 0 ) then
         weapon.ammo = weapon.ammo - 1

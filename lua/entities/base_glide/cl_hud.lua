@@ -97,7 +97,9 @@ function ENT:OnWeaponIndexChange( _, _, index )
     local seats = self.seats
     if not seats then return end
 
-    local gunner = self.seats[2]:GetDriver()
+    local gunnerSeat = self.gunnerSeat or 2
+
+    local gunner = self.seats[gunnerSeat]:GetDriver()
 
     if gunner == LocalPlayer() then
         -- Show the weapon switch notification

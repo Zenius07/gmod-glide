@@ -123,8 +123,10 @@ function ENT:SetInputFloat( seatIndex, action, value )
 end
 
 function ENT:OnInputMouseWheel( seatIndex, value )
-    //if seatIndex < 2 then
-    if seatIndex == 2 then
+
+    local gunnerSeat = self.gunnerSeat or 2
+
+    if seatIndex == gunnerSeat then
         self:SelectWeaponIndex( self:GetWeaponIndex() + ( value > 0 and -1 or 1 ) )
     end
 end
